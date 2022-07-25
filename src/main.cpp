@@ -3,17 +3,18 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <span>
+#include <cstddef>
+#include <algorithm>
 
 int main(int argc, char const* const* argv){
-    CLI::App app{"brainsWitchery binary switcher for IMU firmware"};
+    CLI::App app{"brainsWitchery -- a binary switcher for firmware binaries"};
     
     std::string inputFileName;
     std::string outputFileName{"a.out"};
     std::size_t headerSize{16};
 
     app.add_option("-i,--input", inputFileName, "Input binary filename")->required()->check(CLI::ExistingFile);
-    app.add_option("-o,--output", outputFileName, "Output binary filename");
+    app.add_option("-o,--output", outputFileName, "Output binary filename (default a.out)");
     app.add_option("-s,--headerSize", headerSize, "Size of Header in binary (default 16 byte)");
     
     CLI11_PARSE(app, argc, argv);
@@ -44,22 +45,16 @@ int main(int argc, char const* const* argv){
     }
     fmt::print("OK\n");
 
-    std::span<std::byte> firmwareSpan{std::as_writable_bytes(std::span{inputBuffer})};
-    for(std::size_t i{0}; i < headerSize; ++i){
-        outputFile << std::to_integer<char>(firmwareSpan[i]);
-    }
-    firmwareSpan = firmwareSpan.subspan(headerSize);
+    static constexpr auto bytesToSwap{4};
+    for(std::size_t i{headerSize}; i < inputBuffer.size(); i+=bytesToSwap){
+        auto iterBegin{inputBuffer.begin()+i};
+        auto iterEnd{inputBuffer.begin()+i+bytesToSwap};
+        std::reverse(iterBegin, iterEnd);
+    }    
 
-    static constexpr std::size_t bytesToFlip{4};
-    for(std::size_t i{0}; i < firmwareSpan.size_bytes(); ++i){
-        std::size_t countDown{bytesToFlip-1};
-        for(std::size_t countUp{0}; countUp < bytesToFlip; ++countUp){
-            outputFile << std::to_integer<char>(firmwareSpan[countDown]);
-            --countDown;
-        }
-        firmwareSpan = firmwareSpan.subspan(bytesToFlip);
+    for(auto& ch : inputBuffer){
+        outputFile << std::to_integer<char>(ch);
     }
-
 
     return 0;
 }

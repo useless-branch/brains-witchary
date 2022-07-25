@@ -9,6 +9,7 @@ project(brainsWitchery)
 add_compile_options (-fdiagnostics-color=always)
 add_compile_options (-Wfatal-errors)
 add_compile_options(-march=native)
+add_compile_options(-O3)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     add_compile_options("/W4")
