@@ -97,11 +97,12 @@ function(brainsWitcheryGenerate targetname)
     set(
             command ${brainsWitchery_bin}
             --input=${input_filename}
-            --output=${output_filename}
+            --output=${output_directory_name}/${output_filename}
             --headerSize=${PARSED_ARGS_HEADER_SIZE}
     )
 
     add_custom_command(
+            COMMAND cmake -E make_directory ${output_directory_name}
             COMMAND ${command}
             DEPENDS brainsWitchery ${input_filename} ${brainsWitchery_bin}
             OUTPUT ${output_filename}
