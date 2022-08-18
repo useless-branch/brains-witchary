@@ -53,7 +53,7 @@ int main(int argc, char const* const* argv){
 
     static constexpr auto bytesToSwap{4};
     auto iterBegin{inputBuffer.begin()};
-    while(iterBegin =! inputBuffer.end()){
+    while(iterBegin != inputBuffer.end()){
         std::reverse(iterBegin, iterBegin+bytesToSwap);
         iterBegin = iterBegin + bytesToSwap;
     }
