@@ -84,7 +84,7 @@ function(brainsWitcheryGenerate targetname)
 
     set(input_filename ${CMAKE_CURRENT_SOURCE_DIR}/${PARSED_ARGS_INPUT_FILE})
 
-    set(output_filename ${targetname}.fw)
+    set(output_filename ${targetname}.hpp)
 
     get_target_property(build_dir brainsWitchery BINARY_DIR)
 
@@ -98,6 +98,8 @@ function(brainsWitcheryGenerate targetname)
             command ${brainsWitchery_bin}
             --input=${input_filename}
             --output=${output_directory_name}/${output_filename}
+            --generateHeader=true
+            --name=${targetname}
             --headerSize=${PARSED_ARGS_HEADER_SIZE}
     )
 

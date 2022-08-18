@@ -11,12 +11,16 @@ int main(int argc, char const* const* argv){
     
     std::string inputFileName;
     std::string outputFileName{"a.out"};
+    std::string arrayName{"firmware"};
+
     std::size_t headerSize{16};
+    bool generateHeader{true};
 
     app.add_option("-i,--input", inputFileName, "Input binary filename")->required()->check(CLI::ExistingFile);
     app.add_option("-o,--output", outputFileName, "Output binary filename (default a.out)");
     app.add_option("-s,--headerSize", headerSize, "Size of Header in binary (default 16 byte)");
-    
+    app.add_option("-p,--generateHeader", generateHeader, "Generate in output format C++ Header (default true)");
+    app.add_option("-n,--name", arrayName, "Name of the C++ Array (default \"firmware\")");
     CLI11_PARSE(app, argc, argv);
 
     fmt::print("Opening input binary...");
@@ -50,12 +54,23 @@ int main(int argc, char const* const* argv){
         auto iterBegin{inputBuffer.begin()+i};
         auto iterEnd{inputBuffer.begin()+i+bytesToSwap};
         std::reverse(iterBegin, iterEnd);
-    }    
-
-    for(auto& ch : inputBuffer){
-        outputFile << std::to_integer<char>(ch);
     }
-
+    if(generateHeader)
+    {
+        outputFile << fmt::format("#pragma once"
+                                  "\n\n#include <array>"
+                                  "\n#include<cstdint>"
+                                  "\n\nstatic constexpr std::array<std::byte, {}> {} {{", inputBuffer.size(), arrayName);
+        for(auto& ch : inputBuffer){
+            outputFile << std::to_integer<char>(ch);
+        }
+        outputFile << fmt::format("}};");
+    }
+    else{
+        for(auto& ch : inputBuffer){
+            outputFile << std::to_integer<char>(ch);
+        }
+    }
     return 0;
 }
 
