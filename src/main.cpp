@@ -49,24 +49,27 @@ int main(int argc, char const* const* argv){
     }
     fmt::print("OK\n");
 
+    inputBuffer.erase(inputBuffer.begin(), inputBuffer.begin()+headerSize);
+
     static constexpr auto bytesToSwap{4};
-    for(std::size_t i{headerSize}; i < inputBuffer.size(); i+=bytesToSwap){
-        auto iterBegin{inputBuffer.begin()+i};
-        auto iterEnd{inputBuffer.begin()+i+bytesToSwap};
-        std::reverse(iterBegin, iterEnd);
+    auto iterBegin{inputBuffer.begin()};
+    while(iterBegin =! inputBuffer.end()){
+        std::reverse(iterBegin, iterBegin+bytesToSwap);
+        iterBegin = iterBegin + bytesToSwap;
     }
+
     if(generateHeader)
     {
         outputFile << fmt::format("#pragma once"
                                   "\n\n#include <array>"
-                                  "\n#include<cstdint>"
+                                  "\n#include <cstdint>"
                                   "\n\nstatic constexpr std::array<std::byte, {}> {} {{", inputBuffer.size(), arrayName);
         std::size_t count{0};
         for(auto& ch : inputBuffer){
             if(count % 10 == 0){
-                outputFile << fmt::format("\n");
+                outputFile << fmt::format("\n  ");
             }
-            outputFile << fmt::format("0x{:x}, ", ch);
+            outputFile << fmt::format("0x{:02x}, ", ch);
             ++count;
         }
         outputFile << fmt::format("\n}};");
