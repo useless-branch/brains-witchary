@@ -61,10 +61,15 @@ int main(int argc, char const* const* argv){
                                   "\n\n#include <array>"
                                   "\n#include<cstdint>"
                                   "\n\nstatic constexpr std::array<std::byte, {}> {} {{", inputBuffer.size(), arrayName);
+        std::size_t count{0};
         for(auto& ch : inputBuffer){
-            outputFile << std::to_integer<char>(ch);
+            if(count % 10 == 0){
+                outputFile << fmt::format("\n");
+            }
+            outputFile << fmt::format("0x{:x}, ", ch);
+            ++count;
         }
-        outputFile << fmt::format("}};");
+        outputFile << fmt::format("\n}};");
     }
     else{
         for(auto& ch : inputBuffer){
