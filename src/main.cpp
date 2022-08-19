@@ -69,7 +69,7 @@ int main(int argc, char const* const* argv){
             if(count % 10 == 0){
                 outputFile << fmt::format("\n  ");
             }
-            outputFile << fmt::format("0x{:02x}, ", ch);
+            outputFile << fmt::format("std::byte{{0x{:02x}}}, ", ch);
             ++count;
         }
         outputFile << fmt::format("\n}};");
