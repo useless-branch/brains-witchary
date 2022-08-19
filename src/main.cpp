@@ -83,7 +83,7 @@ int main(int argc, char const* const* argv){
     }
 
     std::uint32_t crcHash = CRC::Calculate(&inputBuffer[0], inputBuffer.size(), CRC::CRC_32());
-    outputFile << fmt::format("\n\n static constexpr std::byte {}_CRC{{{}}};\n", arrayName, crcHash);
+    outputFile << fmt::format("\n\n static constexpr std::uint32_t {}_CRC{{0x{:x}}};\n", arrayName, crcHash);
 
     return 0;
 }
