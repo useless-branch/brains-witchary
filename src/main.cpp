@@ -6,6 +6,8 @@
 #include <cstddef>
 #include <algorithm>
 
+#include "CRC.h"
+
 int main(int argc, char const* const* argv){
     CLI::App app{"brainsWitchery -- a binary switcher for firmware binaries"};
     
@@ -79,6 +81,10 @@ int main(int argc, char const* const* argv){
             outputFile << std::to_integer<char>(ch);
         }
     }
+
+    std::uint32_t crcHash = CRC::Calculate(&inputBuffer[0], inputBuffer.size(), CRC::CRC_32());
+    outputFile << fmt::format("\n\n static constexpr std::byte {}_CRC{{{}}};\n", arrayName, crcHash);
+
     return 0;
 }
 
