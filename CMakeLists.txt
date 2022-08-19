@@ -46,8 +46,6 @@ if(NOT CMAKE_CROSSCOMPILING)
     add_executable(brainsWitchery
             src/main.cpp)
 
-    add_subdirectory(external/CRCpp)
-
     target_link_libraries(brainsWitchery PRIVATE
         fmt::fmt-header-only
         )
