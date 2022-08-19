@@ -51,6 +51,10 @@ int main(int argc, char const* const* argv){
     }
     fmt::print("OK\n");
 
+    std::uint32_t crcHash{0};
+    std::memcpy(&crcHash, &inputBuffer[4], sizeof(crcHash));
+
+
     inputBuffer.erase(inputBuffer.begin(), inputBuffer.begin()+headerSize);
 
     static constexpr auto bytesToSwap{4};
@@ -82,7 +86,7 @@ int main(int argc, char const* const* argv){
         }
     }
 
-    std::uint32_t crcHash = CRC::Calculate(&inputBuffer[0], inputBuffer.size(), CRC::CRC_32());
+
     outputFile << fmt::format("\n\n static constexpr std::uint32_t {}_CRC{{0x{:x}}};\n", arrayName, crcHash);
 
     return 0;
