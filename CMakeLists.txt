@@ -38,10 +38,7 @@ if(NOT CMAKE_CROSSCOMPILING)
         message("Compiling with: Clang Compiler")
     endif()
 
-
-
     find_package(fmt)
-
 
     add_executable(brainsWitchery
             src/main.cpp)

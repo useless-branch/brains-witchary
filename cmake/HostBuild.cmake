@@ -4,10 +4,9 @@ function(configure_host_build targetname)
     set(extra_args COMMAND_ERROR_IS_FATAL ANY)
   endif()
 
-  if(${CMAKE_VERSION} VERSION_LESS "3.24.0")
+
     unset(ENV{CC})
     unset(ENV{CXX})
-  endif()
 
   set(build_dir ${CMAKE_CURRENT_BINARY_DIR}/host_build)
 
