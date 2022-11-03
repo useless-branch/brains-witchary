@@ -38,13 +38,27 @@ if(NOT CMAKE_CROSSCOMPILING)
         message("Compiling with: Clang Compiler")
     endif()
 
-    find_package(fmt)
+    include(FetchContent)
+    FetchContent_Declare(
+            CLI11
+            GIT_REPOSITORY https://github.com/CLIUtils/CLI11
+            GIT_TAG main
+    )
+    FetchContent_MakeAvailable(CLI11)
+
+    FetchContent_Declare(
+            fmt
+            GIT_REPOSITORY https://github.com/fmtlib/fmt
+            GIT_TAG master
+    )
+    FetchContent_MakeAvailable(fmt)
 
     add_executable(brainsWitchery
             src/main.cpp)
 
     target_link_libraries(brainsWitchery PRIVATE
         fmt::fmt-header-only
+            CLI11::CLI11
         )
 
     target_include_directories(brainsWitchery PRIVATE external/CRCpp/inc)
