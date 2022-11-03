@@ -25,7 +25,7 @@ int main(int argc, char const* const* argv){
     app.add_option("-n,--name", arrayName, "Name of the C++ Array (default \"firmware\")");
     CLI11_PARSE(app, argc, argv);
 
-    fmt::print("Opening input binary...\n");
+    fmt::print("\n\nOpening input binary...\n");
     std::ifstream inputFile{inputFileName, std::ios::binary | std::ios::ate};
     if(!inputFile.is_open())
     {
@@ -87,7 +87,7 @@ int main(int argc, char const* const* argv){
 
 
     outputFile << fmt::format("\n\n static constexpr std::uint32_t {}_CRC{{0x{:x}}};\n", arrayName, crcHash);
-
+    fmt::print("File is written. Brains successfully Witched!\n");
     return 0;
 }
 
