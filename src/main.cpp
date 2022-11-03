@@ -25,7 +25,7 @@ int main(int argc, char const* const* argv){
     app.add_option("-n,--name", arrayName, "Name of the C++ Array (default \"firmware\")");
     CLI11_PARSE(app, argc, argv);
 
-    fmt::print("Opening input binary...");
+    fmt::print("Opening input binary...\n");
     std::ifstream inputFile{inputFileName, std::ios::binary | std::ios::ate};
     if(!inputFile.is_open())
     {
@@ -33,20 +33,19 @@ int main(int argc, char const* const* argv){
         return -1;
     }
     fmt::print("OK\n");
-    fmt::print("Reading binary...");
+    fmt::print("Reading binary...\n");
     std::size_t fileSize = inputFile.tellg();
     inputFile.seekg(0);
     std::vector<std::byte> inputBuffer;
     inputBuffer.resize(fileSize);
     inputFile.read(reinterpret_cast<char*>(&inputBuffer[0]), fileSize);
-    fmt::print("FileSize: {} ", fileSize);
-    fmt::print("OK\n");
+    fmt::print("FileSize: {}\n", fileSize);
 
-    fmt::print("Opening output binary...");
+    fmt::print("Opening output binary...\n");
     std::ofstream outputFile{outputFileName, std::ios::binary | std::ios::trunc};
     if(!outputFile.is_open())
     {
-        fmt::print("Failed to open File! Abort.");
+        fmt::print("Failed to open File! Abort.\n");
         return -1;
     }
     fmt::print("OK\n");
